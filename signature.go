@@ -18,6 +18,10 @@ func GetPaymentNotificationSignature(billNo, paymentStatusCode string) string {
 	return getSha1(getMD5Hash(FaspayConfig.MerChantUser + FaspayConfig.MerchantPassword + billNo + paymentStatusCode))
 }
 
+func GetCheckVaStaticSignature(vaNumber string) string {
+	return getSha1(getMD5Hash(FaspayConfig.MerChantUser + FaspayConfig.MerchantPassword + vaNumber))
+}
+
 func getMD5Hash(text string) string {
 	hasher := md5.New()
 	hasher.Write([]byte(text))

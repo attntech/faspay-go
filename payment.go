@@ -155,6 +155,14 @@ type PaymentInquiryResponse struct {
 	ResponseDesc      string `json:"response_desc"`
 }
 
+type VaStaticResponse struct {
+	Response     string `json:"response"`
+	VaNumber     string `json:"va_number"`
+	Amount       string `json:"amount"`
+	CustName     string `json:"cust_name"`
+	ResponseCode string `json:"response_code"`
+}
+
 func GetPaymentChannel() (result *PaymentChannelResponse, err error) {
 
 	payload := &PaymentChannelRequest{

@@ -55,5 +55,6 @@ const (
 	RequestPaymentInquiry     = "Pengecekan Status Pembayaran"
 
 	ResponseCodeSuccess                 = "00"
+	ResponseCodeFailure                 = "01"
 	ResponseCodeCancelPaymentByCustomer = "17"
 )
