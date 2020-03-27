@@ -195,6 +195,17 @@ func SendPaymentDebit(params *PaymentDebitRequest) (result *PaymentResponse, err
 		return nil, err
 	}
 
+	if sendRequest != nil && sendRequest["response_error"] != nil {
+		var responseCode map[string]interface{}
+		responseCode = sendRequest["response_error"].(map[string]interface{})
+
+		result = &PaymentResponse{
+			ResponseDesc: responseCode["response_desc"].(string),
+			ResponseCode: ResponseCodeFailure,
+		}
+		return result, nil
+	}
+
 	result = &PaymentResponse{
 		Response:     sendRequest["response"].(string),
 		TrxID:        sendRequest["trx_id"].(string),
