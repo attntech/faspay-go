@@ -187,9 +187,13 @@ func GetPaymentChannel() (result *PaymentChannelResponse, err error) {
 
 func SendPaymentDebit(params *PaymentDebitRequest) (result *PaymentResponse, err error) {
 
+	// please refer to this doc https://faspay.co.id/docs/index-business.html#request-parameter-post-data
+
 	params.MerchantId = FaspayConfig.MerchandID
 	params.Request = RequestPaymentDebit
 	params.Signature = GetPaymentSignature(params.BillNo)
+	params.BillGross = params.BillGross + "00"
+	params.BillTotal = params.BillTotal + "00"
 	sendRequest, err := SendPost(nil, params, getPaymentUrl())
 	if err != nil {
 		return nil, err
