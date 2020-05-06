@@ -1,7 +1,6 @@
 package faspay
 
 import (
-	"fmt"
 	"os"
 )
 
@@ -48,7 +47,6 @@ func Initialize() {
 		panic("ENV is empty. do this; export ENV=XXXXX")
 	}
 
-	fmt.Println(FaspayConfig.Env, " INIENV")
 	if FaspayConfig.Env != "prod" {
 		FaspayConfig.Url = "https://dev.faspay.co.id/"
 	} else {

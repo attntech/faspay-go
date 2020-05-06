@@ -217,7 +217,7 @@ func SendPaymentDebit(params *PaymentDebitRequest) (result *PaymentResponse, err
 		ResponseDesc: sendRequest["response_desc"].(string),
 		BillNo:       sendRequest["bill_no"].(string),
 		BillItems:    sendRequest["bill_items"].([]interface{}),
-		RedirectURL:  getPaymentRedirectUrl(params.BillNo, sendRequest["trx_id"].(string)),
+		RedirectURL:  sendRequest["redirect_url"].(string),
 	}
 	return
 }

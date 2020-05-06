@@ -13,7 +13,11 @@ func getPaymentInquiryStatusUrl() string {
 }
 
 func getPaymentRedirectUrl(billno, trxID string) string {
-	return FaspayConfig.Url + "pws/100003/0830000010100000/" + GetPaymentSignature(billno) + "?trx_id=" + trxID + "&merchant_id=" + FaspayConfig.MerchandID + "&bill_no=" + billno
+	endpoint := "pws/100003/2830000010100000/"
+	if FaspayConfig.Env != "prod" {
+		endpoint = "pws/100003/0830000010100000/"
+	}
+	return FaspayConfig.Url + endpoint + GetPaymentSignature(billno) + "?trx_id=" + trxID + "&merchant_id=" + FaspayConfig.MerchandID + "&bill_no=" + billno
 }
 
 func getPaymenDebitCancelUrl() string {
