@@ -13,6 +13,7 @@ type Config struct {
 	MerchantPassword string
 	Env              string
 	Url              string
+	TxnPassword      string
 }
 
 func Initialize() {

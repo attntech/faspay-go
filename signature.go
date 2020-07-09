@@ -22,6 +22,10 @@ func GetCheckVaStaticSignature(vaNumber string) string {
 	return getSha1(getMD5Hash(FaspayConfig.MerChantUser + FaspayConfig.MerchantPassword + vaNumber))
 }
 
+func getSignatureKredivo() string {
+	return getSha1(getMD5Hash(FaspayConfig.MerChantUser + FaspayConfig.MerchantPassword))
+}
+
 func getMD5Hash(text string) string {
 	hasher := md5.New()
 	hasher.Write([]byte(text))
