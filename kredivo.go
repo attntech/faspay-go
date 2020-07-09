@@ -85,7 +85,7 @@ func SendListInquiryPaymentTypeKredivo(params *ListPaymentTypeKredivoRequest) (r
 func SendCancelTransactionKredivo(params *CancelTransactionRequestKredivo) (result *CancelTransactionResponseKrevido, err error) {
 	params.MerchantID = FaspayConfig.MerchandID
 	params.Merchant = FaspayConfig.MerChantUser
-	params.Request = RequestPaymentTypeKredivo
+	params.Request = RequestCancelTransactionKredivo
 	params.Signature = getSignatureKredivo()
 	sendRequest, err := SendPost(nil, params, getCancelTransactionKredivoURL())
 	if err != nil {

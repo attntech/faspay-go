@@ -49,11 +49,12 @@ const (
 	Tenor6Months     = "06"
 	Tenor12Months    = "12"
 
-	RequestPaymentDebit       = "Transmisi Info Detil Pembelian"
-	RequestPaymentChannel     = "Daftar Payment Channel"
-	RequestPaymentDebitCancel = "Canceling Payment"
-	RequestPaymentInquiry     = "Pengecekan Status Pembayaran"
-	RequestPaymentTypeKredivo = "Pengecekan Payment Type Kredivo"
+	RequestPaymentDebit             = "Transmisi Info Detil Pembelian"
+	RequestPaymentChannel           = "Daftar Payment Channel"
+	RequestPaymentDebitCancel       = "Canceling Payment"
+	RequestPaymentInquiry           = "Pengecekan Status Pembayaran"
+	RequestPaymentTypeKredivo       = "Pengecekan Payment Type Kredivo"
+	RequestCancelTransactionKredivo = "Pembatalan Pembelian Kredivo"
 
 	ResponseCodeSuccess                 = "00"
 	ResponseCodeFailure                 = "01"
