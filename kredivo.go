@@ -53,18 +53,19 @@ type PaymentsKredivo struct {
 }
 
 type ListPaymentTypeKredivoResponse struct {
-	Response     string           `json:"response"`
-	MerchantID   string           `json:"merchant_id"`
-	Merchant     string           `json:"merchant"`
-	Payments     *PaymentsKredivo `json:"payments"`
-	ResponseCode string           `json:"response_code"`
-	ResponseDesc string           `json:"response_desc"`
+	Response     string      `json:"response"`
+	MerchantID   string      `json:"merchant_id"`
+	Merchant     string      `json:"merchant"`
+	Payments     interface{} `json:"payments"`
+	ResponseCode string      `json:"response_code"`
+	ResponseDesc string      `json:"response_desc"`
 }
 
-func SendListInquiryPaymentType(params *ListPaymentTypeKredivoRequest) (result *ListPaymentTypeKredivoResponse, err error) {
+func SendListInquiryPaymentTypeKredivo(params *ListPaymentTypeKredivoRequest) (result *ListPaymentTypeKredivoResponse, err error) {
 	params.MerchantID = FaspayConfig.MerchandID
-	params.Merchant = FaspayConfig.MerchantName
+	params.Merchant = FaspayConfig.MerChantUser
 	params.Request = RequestPaymentTypeKredivo
+	params.Signature = getSignatureKredivo()
 	sendRequest, err := SendPost(nil, params, getListPaymentTypeKredivoURL())
 	if err != nil {
 		return nil, err
@@ -74,7 +75,7 @@ func SendListInquiryPaymentType(params *ListPaymentTypeKredivoRequest) (result *
 		Response:     sendRequest["response"].(string),
 		Merchant:     sendRequest["merchant"].(string),
 		MerchantID:   sendRequest["merchant_id"].(string),
-		Payments:     sendRequest["payments"].(*PaymentsKredivo),
+		Payments:     sendRequest["payments"].(interface{}),
 		ResponseDesc: sendRequest["response_desc"].(string),
 		ResponseCode: sendRequest["response_code"].(string),
 	}
@@ -83,8 +84,9 @@ func SendListInquiryPaymentType(params *ListPaymentTypeKredivoRequest) (result *
 
 func SendCancelTransactionKredivo(params *CancelTransactionRequestKredivo) (result *CancelTransactionResponseKrevido, err error) {
 	params.MerchantID = FaspayConfig.MerchandID
-	params.Merchant = FaspayConfig.MerchantName
+	params.Merchant = FaspayConfig.MerChantUser
 	params.Request = RequestPaymentTypeKredivo
+	params.Signature = getSignatureKredivo()
 	sendRequest, err := SendPost(nil, params, getCancelTransactionKredivoURL())
 	if err != nil {
 		return nil, err

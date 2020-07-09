@@ -4,7 +4,6 @@ import (
 	"crypto/md5"
 	"crypto/sha1"
 	"encoding/hex"
-	"fmt"
 )
 
 func GetPaymentChannelSignature() string {
@@ -23,10 +22,8 @@ func GetCheckVaStaticSignature(vaNumber string) string {
 	return getSha1(getMD5Hash(FaspayConfig.MerChantUser + FaspayConfig.MerchantPassword + vaNumber))
 }
 
-func GetPaymentWithCardSignature(merchantTransID, amount string) string {
-	// ##merchantid##txnpassword##trainid##amount##0##
-	signFormat := fmt.Sprintf("##%s##%s##%s##%s##0##", FaspayConfig.MerchandID, FaspayConfig.TxnPassword, merchantTransID, amount)
-	return getSha1(signFormat)
+func getSignatureKredivo() string {
+	return getSha1(getMD5Hash(FaspayConfig.MerChantUser + FaspayConfig.MerchantPassword))
 }
 
 func getMD5Hash(text string) string {
