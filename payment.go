@@ -1,5 +1,14 @@
 package faspay
 
+import (
+	"fmt"
+	"net/http"
+	"net/url"
+	"strings"
+
+	"github.com/astaxie/beego"
+)
+
 type PaymentNotification struct {
 	Request           string `json:"request"`
 	TrxID             string `json:"trx_id"`
@@ -91,6 +100,69 @@ type PaymentDebitRequest struct {
 	Reserve1                   string  `json:"reserve1"`
 	Reserve2                   string  `json:"reserve2"`
 	Signature                  string  `json:"signature"`
+}
+
+type PaymentWithCardRequest struct {
+	PaymentMethod              string
+	TxnPassword                string
+	MerchantTranid             string
+	Currencycode               string
+	Amount                     string
+	Custname                   string
+	Custemail                  string
+	Description                string
+	ReturnURL                  string
+	Signature                  string
+	BillingAddress             string
+	BillingAddressCity         string
+	BillingAddressRegion       string
+	BillingAddressState        string
+	BillingAddressPoscode      string
+	BillingAddressCountryCode  string
+	ReceiverNameForShipping    string
+	ShippingAddress            string
+	ShippingAddressCity        string
+	ShippingAddressRegion      string
+	ShippingAddressState       string
+	ShippingAddressPoscode     string
+	ShippingAddressCountryCode string
+	Shippingcost               string
+	PhoneNo                    string
+	Mref1                      string
+	Mref2                      string
+	Mref3                      string
+	Mref4                      string
+	Mref5                      string
+	Mref6                      string
+	Mref7                      string
+	Mref8                      string
+	Mref9                      string
+	Mref10                     string
+	Mparam1                    string
+	Mparam2                    string
+	CustomerRef                string
+	PymtInd                    string
+	PymtCriteria               string
+	PymtToken                  string
+	Frisk1                     string
+	Frisk2                     string
+	DomicileAddress            string
+	DomicileAddressCity        string
+	DomicileAddressRegion      string
+	DomicileAddressState       string
+	DomicileAddressPoscode     string
+	DomicileAddressCountryCode string
+	DomicilePhoneNo            string
+	HandshakeUrl               string
+	HandshakeParam             string
+	StyleMerchantName          string
+	StyleOrderSummary          string
+	StyleOrderNo               string
+	StyleOrderDesc             string
+	StyleAmount                string
+	StyleBackgroundLeft        string
+	StyleButtonCancel          string
+	StyleFontCancel            string
 }
 
 type PaymentChannelRequest struct {
@@ -188,12 +260,9 @@ func GetPaymentChannel() (result *PaymentChannelResponse, err error) {
 func SendPaymentDebit(params *PaymentDebitRequest) (result *PaymentResponse, err error) {
 
 	// please refer to this doc https://faspay.co.id/docs/index-business.html#request-parameter-post-data
-
 	params.MerchantId = FaspayConfig.MerchandID
 	params.Request = RequestPaymentDebit
 	params.Signature = GetPaymentSignature(params.BillNo)
-	params.BillGross = params.BillGross + "00"
-	params.BillTotal = params.BillTotal + "00"
 	sendRequest, err := SendPost(nil, params, getPaymentUrl())
 	if err != nil {
 		return nil, err
@@ -280,5 +349,127 @@ func PaymentInquiryStatus(trxID, billNo string) (result *PaymentInquiryResponse,
 		PaymentReff:       sendRequest["payment_reff"].(string),
 	}
 	return
+
+}
+
+func SendPaymentWithCard(params *PaymentWithCardRequest) (redirectURL string, err error) {
+
+	signature := GetPaymentWithCardSignature(params.MerchantTranid, params.Amount)
+	postData := url.Values{}
+	postData.Set("TRANSACTIONTYPE", "1")
+	postData.Set("RESPONSE_TYPE", "2")
+	postData.Set("LANG", "")
+	postData.Set("MERCHANTID", FaspayConfig.MerchandID)
+	postData.Set("PAYMENT_METHOD", "1")
+	postData.Set("TXN_PASSWORD", FaspayConfig.TxnPassword)
+	postData.Set("MERCHANT_TRANID", params.MerchantTranid)
+	postData.Set("CURRENCYCODE", "IDR")
+	postData.Set("AMOUNT", params.Amount)
+	postData.Set("CUSTNAME", params.Custname)
+	postData.Set("CUSTEMAIL", params.Custemail)
+	postData.Set("DESCRIPTION", params.Description)
+	postData.Set("RETURN_URL", params.ReturnURL)
+	postData.Set("SIGNATURE", signature)
+	postData.Set("BILLING_ADDRESS", params.BillingAddress)
+	postData.Set("BILLING_ADDRESS_CITY", params.BillingAddressCity)
+	postData.Set("BILLING_ADDRESS_REGION", params.BillingAddressRegion)
+	postData.Set("BILLING_ADDRESS_STATE", params.BillingAddressState)
+	postData.Set("BILLING_ADDRESS_POSCODE", params.BillingAddressPoscode)
+	postData.Set("BILLING_ADDRESS_COUNTRY_CODE", params.BillingAddressCountryCode)
+	postData.Set("RECEIVER_NAME_FOR_SHIPPING", params.ReceiverNameForShipping)
+	postData.Set("SHIPPING_ADDRESS", params.ShippingAddress)
+	postData.Set("SHIPPING_ADDRESS_CITY", params.BillingAddressCity)
+	postData.Set("SHIPPING_ADDRESS_REGION", params.ShippingAddressRegion)
+	postData.Set("SHIPPING_ADDRESS_STATE", params.ShippingAddressState)
+	postData.Set("SHIPPING_ADDRESS_POSCODE", params.ShippingAddressPoscode)
+	postData.Set("SHIPPING_ADDRESS_COUNTRY_CODE", params.ShippingAddressCountryCode)
+	postData.Set("SHIPPINGCOST", params.Shippingcost)
+	postData.Set("PHONE_NO", params.PhoneNo)
+	postData.Set("MREF1", params.Mref1)
+	postData.Set("MREF2", params.Mref2)
+	postData.Set("MREF3", params.Mref3)
+	postData.Set("MREF4", params.Mref4)
+	postData.Set("MREF5", params.Mref5)
+	postData.Set("MREF6", params.Mref6)
+	postData.Set("MREF7", params.Mref7)
+	postData.Set("MREF8", params.Mref8)
+	postData.Set("MREF9", params.Mref9)
+	postData.Set("MREF10", params.Mref10)
+	postData.Set("MPARAM1", params.Mparam1)
+	postData.Set("MPARAM2", params.Mparam2)
+	postData.Set("CUSTOMER_REF", params.CustomerRef)
+	postData.Set("PYMT_IND", params.PymtInd)
+	postData.Set("PYMT_CRITERIA", params.PymtCriteria)
+	postData.Set("PYMT_TOKEN", params.PymtToken)
+	postData.Set("FRISK1", params.Frisk1)
+	postData.Set("FRISK2", params.Frisk2)
+	postData.Set("DOMICILE_ADDRESS", params.DomicileAddress)
+	postData.Set("DOMICILE_ADDRESS_CITY", params.DomicileAddressCity)
+	postData.Set("DOMICILE_ADDRESS_REGION", params.DomicileAddressRegion)
+	postData.Set("DOMICILE_ADDRESS_STATE", params.DomicileAddressState)
+	postData.Set("DOMICILE_ADDRESS_POSCODE", params.DomicileAddressPoscode)
+	postData.Set("DOMICILE_ADDRESS_COUNTRY_CODE", params.BillingAddressCountryCode)
+	postData.Set("DOMICILE_PHONE_NO", params.PhoneNo)
+	postData.Set("handshake_url", params.HandshakeUrl)
+	postData.Set("handshake_param", "")
+	postData.Set("style_merchant_name", "black")
+	postData.Set("style_order_summary", "black")
+	postData.Set("style_order_no", "black")
+	postData.Set("style_order_desc", "black")
+	postData.Set("style_amount", "black")
+	postData.Set("style_background_left", "#fff")
+	postData.Set("style_button_cancel", "grey")
+	postData.Set("style_font_cancel", "white")
+
+	request, err := http.NewRequest("POST", "https://fpgdev.faspay.co.id/payment", strings.NewReader(postData.Encode()))
+	if err != nil {
+		return
+	}
+	request.Header.Add("User-Agent", "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.116 Safari/537.36")
+	request.Header.Add("Content-Type", "application/x-www-form-urlencoded")
+	request.Header.Add("Cookie", "PHPSESSID")
+
+	// client := new(http.Client)
+	// client.CheckRedirect = func(req *http.Request, via []*http.Request) error {
+	// 	return errors.New("Redirect")
+	// }
+
+	client := &http.Client{
+		CheckRedirect: func(req *http.Request, via []*http.Request) error {
+			return http.ErrUseLastResponse
+		},
+	}
+
+	// response, err := http.DefaultClient.Do(request)
+	// if err != nil {
+	// 	return c.ReturnError(err)
+	// }
+
+	// client := new(http.Client)
+	// client.CheckRedirect = func(req *http.Request, via []*http.Request) error {
+	// 	return errors.New("Redirect")
+	// }
+
+	response, err := client.Do(request)
+	if err != nil {
+		beego.Notice("RENE")
+		return c.ReturnError(err)
+	}
+
+	defer response.Body.Close()
+	fmt.Println(response.Request.URL.String())
+	fmt.Println(response.StatusCode)
+
+	url := ""
+	if response.StatusCode == http.StatusFound { //status code 302
+		beego.Notice("RENE BRO")
+
+		url, err := response.Location()
+		if err != nil {
+			return c.ReturnError(err)
+		}
+
+		beego.Notice("BRORBO", url.String())
+	}
 
 }

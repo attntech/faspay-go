@@ -23,3 +23,25 @@ func getPaymentRedirectUrl(billno, trxID string) string {
 func getPaymenDebitCancelUrl() string {
 	return FaspayConfig.Url + "cvr/100005/10"
 }
+
+func getPaymentCardURL() string {
+	url := "https://fg.faspay.co.id/payment"
+	if FaspayConfig.Env != "prod" {
+		url = "https://fpgdev.faspay.co.id/payment"
+	}
+	return url
+}
+
+func getListPaymentTypeKredivoURL() string {
+	if FaspayConfig.Env != "prod" {
+		return "https://dev.faspay.co.id/cvr/300012/10"
+	}
+	return "https://web.faspay.co.id/cvr/300012/10"
+}
+
+func getCancelTransactionKredivoURL() string {
+	if FaspayConfig.Env != "prod" {
+		return "https://dev.faspay.co.id/cvr/300013/10"
+	}
+	return "https://web.faspay.co.id/cvr/300013/10"
+}

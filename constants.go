@@ -53,6 +53,7 @@ const (
 	RequestPaymentChannel     = "Daftar Payment Channel"
 	RequestPaymentDebitCancel = "Canceling Payment"
 	RequestPaymentInquiry     = "Pengecekan Status Pembayaran"
+	RequestPaymentTypeKredivo = "Pengecekan Payment Type Kredivo"
 
 	ResponseCodeSuccess                 = "00"
 	ResponseCodeFailure                 = "01"
