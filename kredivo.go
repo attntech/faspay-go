@@ -14,9 +14,10 @@ type CancelTransactionRequestKredivo struct {
 	TrxID              string `json:"trx_id"`
 	BillNo             string `json:"bill_no"`
 	BillTotal          string `json:"bill_total"`
-	CancelledBy        string `json:"cancellation_type"`
+	CancelledBy        string `json:"cancelled_by"`
 	CancellationType   string `json:"cancellation_type"`
 	CancellationAmount string `json:"cancellation_amount"`
+	CancellationReason string `json:"cancellation_reason"`
 	Signature          string `json:"signature"`
 }
 
@@ -61,6 +62,43 @@ type ListPaymentTypeKredivoResponse struct {
 	ResponseDesc string      `json:"response_desc"`
 }
 
+func SendPaymentKredivo(params *PaymentDebitRequest) (result *PaymentResponse, err error) {
+
+	// please refer to this doc https://faspay.co.id/docs/index-business.html#url-endpoint-post-data-3136
+
+	params.MerchantId = FaspayConfig.MerchandID
+	params.Request = RequestPaymentKredivo
+	params.Signature = GetPaymentSignature(params.BillNo)
+	params.BillGross = params.BillGross + "00"
+	params.BillTotal = params.BillTotal + "00"
+	sendRequest, err := SendPost(nil, params, getPaymentUrl())
+	if err != nil {
+		return nil, err
+	}
+
+	if sendRequest != nil && sendRequest["response_error"] != nil {
+		var responseCode map[string]interface{}
+		responseCode = sendRequest["response_error"].(map[string]interface{})
+
+		result = &PaymentResponse{
+			ResponseDesc: responseCode["response_desc"].(string),
+			ResponseCode: ResponseCodeFailure,
+		}
+		return result, nil
+	}
+
+	result = &PaymentResponse{
+		Response:     sendRequest["response"].(string),
+		TrxID:        sendRequest["trx_id"].(string),
+		ResponseCode: sendRequest["response_code"].(string),
+		ResponseDesc: sendRequest["response_desc"].(string),
+		BillNo:       sendRequest["bill_no"].(string),
+		BillItems:    sendRequest["bill_items"].([]interface{}),
+		RedirectURL:  sendRequest["redirect_url"].(string),
+	}
+	return
+}
+
 func SendListInquiryPaymentTypeKredivo(params *ListPaymentTypeKredivoRequest) (result *ListPaymentTypeKredivoResponse, err error) {
 	params.MerchantID = FaspayConfig.MerchandID
 	params.Merchant = FaspayConfig.MerChantUser
@@ -86,7 +124,10 @@ func SendCancelTransactionKredivo(params *CancelTransactionRequestKredivo) (resu
 	params.MerchantID = FaspayConfig.MerchandID
 	params.Merchant = FaspayConfig.MerChantUser
 	params.Request = RequestCancelTransactionKredivo
-	params.Signature = getSignatureKredivo()
+	params.CancellationReason = "Tidak jadi bayar"
+	params.CancellationType = "FULL"
+	params.CancelledBy = FaspayConfig.MerChantUser
+	params.Signature = GetPaymentSignature(params.BillNo)
 	sendRequest, err := SendPost(nil, params, getCancelTransactionKredivoURL())
 	if err != nil {
 		return nil, err
