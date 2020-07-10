@@ -55,6 +55,7 @@ const (
 	RequestPaymentInquiry           = "Pengecekan Status Pembayaran"
 	RequestPaymentTypeKredivo       = "Pengecekan Payment Type Kredivo"
 	RequestCancelTransactionKredivo = "Pembatalan Pembelian Kredivo"
+	RequestPaymentKredivo           = "Post Data Transaksi"
 
 	ResponseCodeSuccess                 = "00"
 	ResponseCodeFailure                 = "01"
