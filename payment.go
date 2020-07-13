@@ -29,6 +29,7 @@ type PaymentNotificationResponse struct {
 }
 
 type Item struct {
+	ID          string `json:"id"`
 	Product     string `json:"product"`
 	Qty         string `json:"qty"`
 	Amount      string `json:"amount"`
