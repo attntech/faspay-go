@@ -36,6 +36,8 @@ type Item struct {
 	PaymentPlan string `json:"payment_plan"`
 	MerchantID  string `json:"merchant_id"`
 	Tenor       string `json:"tenor"`
+	Type        string `json:"type"`
+	Url         string `json:"url"`
 }
 
 type PaymentResponse struct {
