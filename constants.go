@@ -23,15 +23,15 @@ const (
 	OVO                   = "812"
 	Maybank2U             = "814"
 
-	PaymentStatusCodeBelumDiProses = iota
-	PaymentStatusCodeDalamProses
-	PaymentStatusCodePaymentSukses
-	PaymentStatusCodePaymentGagal
-	PaymentStatusCodePaymentReversal
-	PaymentStatusCodeTagihanTidakDitemukan
-	PaymentStatusCodePaymentExpired
-	PaymentStatusCodePaymentCancelled
-	PaymentStatusCodeUnknown
+	PaymentStatusCodeBelumDiProses         = "0"
+	PaymentStatusCodeDalamProses           = "1"
+	PaymentStatusCodePaymentSukses         = "2"
+	PaymentStatusCodePaymentGagal          = "3"
+	PaymentStatusCodePaymentReversal       = "4"
+	PaymentStatusCodeTagihanTidakDitemukan = "5"
+	PaymentStatusCodePaymentExpired        = "7"
+	PaymentStatusCodePaymentCancelled      = "8"
+	PaymentStatusCodeUnknown               = "9"
 
 	TerminalOriginWeb           = "10"
 	TerminalOriginMobAppIOS     = "22"
