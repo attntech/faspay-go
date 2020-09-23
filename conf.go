@@ -55,3 +55,11 @@ func Initialize() {
 	}
 
 }
+
+func NewClient() {
+	if FaspayConfig.Env != "prod" {
+		FaspayConfig.Url = "https://dev.faspay.co.id/"
+	} else {
+		FaspayConfig.Url = "https://web.faspay.co.id/"
+	}
+}
