@@ -94,6 +94,7 @@ type PaymentDebitRequest struct {
 	Reserve1                   string  `json:"reserve1"`
 	Reserve2                   string  `json:"reserve2"`
 	Signature                  string  `json:"signature"`
+	PaymentDestination         string  `json:"-"`
 }
 
 type PaymentChannelRequest struct {
@@ -165,6 +166,12 @@ type VaStaticResponse struct {
 	ResponseCode string `json:"response_code"`
 }
 
+type OVODirectRequest struct {
+	TrxID     string `json:"trx_id"`
+	OVONumber string `json:"ovo_number"`
+	Signature string `json:"signature"`
+}
+
 func GetPaymentChannel() (result *PaymentChannelResponse, err error) {
 
 	payload := &PaymentChannelRequest{
@@ -221,6 +228,18 @@ func SendPaymentDebit(params *PaymentDebitRequest) (result *PaymentResponse, err
 		BillNo:       sendRequest["bill_no"].(string),
 		BillItems:    sendRequest["bill_items"].([]interface{}),
 		RedirectURL:  sendRequest["redirect_url"].(string),
+	}
+
+	if params.PaymentChannel == OVO {
+		ovoRequest := &OVODirectRequest{
+			TrxID:     result.TrxID,
+			OVONumber: params.PaymentDestination,
+			Signature: GetPaymentSignature(result.TrxID),
+		}
+		_, err := SendPostOvo(ovoRequest, getOvoDirectUrl())
+		if err != nil {
+			return nil, err
+		}
 	}
 	return
 }

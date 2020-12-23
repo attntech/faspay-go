@@ -8,6 +8,10 @@ func getPaymentUrl() string {
 	return FaspayConfig.Url + "cvr/300011/10"
 }
 
+func getOvoDirectUrl() string {
+	return FaspayConfig.Url + "pws/ovo_direct"
+}
+
 func getPaymentInquiryStatusUrl() string {
 	return FaspayConfig.Url + "cvr/100004/10"
 }
