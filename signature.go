@@ -4,6 +4,7 @@ import (
 	"crypto/md5"
 	"crypto/sha1"
 	"encoding/hex"
+	"fmt"
 )
 
 func GetPaymentChannelSignature() string {
@@ -11,6 +12,8 @@ func GetPaymentChannelSignature() string {
 }
 
 func GetPaymentSignature(billNo string) string {
+	fmt.Println("BILLNO", billNo)
+	fmt.Println("COMBINED STRING", FaspayConfig.MerChantUser+FaspayConfig.MerchantPassword+billNo)
 	return getSha1(getMD5Hash(FaspayConfig.MerChantUser + FaspayConfig.MerchantPassword + billNo))
 }
 
