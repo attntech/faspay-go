@@ -231,15 +231,14 @@ func SendPaymentDebit(params *PaymentDebitRequest) (result *PaymentResponse, err
 	}
 
 	if params.PaymentChannel == OVO {
-		ovoRequest := &OVODirectRequest{
-			TrxID:     result.TrxID,
-			OVONumber: params.PaymentDestination,
-			Signature: GetPaymentSignature(result.TrxID),
-		}
-		_, err := SendPostOvo(ovoRequest, getOvoDirectUrl())
-		if err != nil {
-			return nil, err
-		}
+		go func(result *PaymentResponse) {
+			ovoRequest := &OVODirectRequest{
+				TrxID:     result.TrxID,
+				OVONumber: params.PaymentDestination,
+				Signature: GetPaymentSignature(result.TrxID),
+			}
+			_, _ = SendPostOvo(ovoRequest, getOvoDirectUrl())
+		}(result)
 	}
 	return
 }

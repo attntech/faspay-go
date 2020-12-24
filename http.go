@@ -46,15 +46,12 @@ func SendPostOvo(param *OVODirectRequest, urlPost string) (result map[string]int
 	req, _ := http.NewRequest("POST", urlPost, strings.NewReader(form.Encode()))
 	req.Header.Add("Content-Type", "application/x-www-form-urlencoded")
 
-	_, err = http.DefaultClient.Do(req)
-	// if err != nil {
-	// 	return
-	// }
+	res, err := http.DefaultClient.Do(req)
+	if err != nil {
+		return
+	}
 
-	// defer res.Body.Close()
-	// err = json.NewDecoder(res.Body).Decode(&result)
-	// if err != nil {
-	// 	return
-	// }
+	defer res.Body.Close()
+
 	return
 }
