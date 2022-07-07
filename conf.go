@@ -49,7 +49,7 @@ func Initialize() {
 	}
 
 	if FaspayConfig.Env != "prod" {
-		FaspayConfig.Url = "https://dev.faspay.co.id/"
+		FaspayConfig.Url = "https://debit-sandbox.faspay.co.id/"
 	} else {
 		FaspayConfig.Url = "https://web.faspay.co.id/"
 	}
@@ -58,7 +58,7 @@ func Initialize() {
 
 func NewClient() {
 	if FaspayConfig.Env != "prod" {
-		FaspayConfig.Url = "https://dev.faspay.co.id/"
+		FaspayConfig.Url = "https://debit-sandbox.faspay.co.id/"
 	} else {
 		FaspayConfig.Url = "https://web.faspay.co.id/"
 	}

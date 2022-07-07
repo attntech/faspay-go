@@ -37,15 +37,9 @@ func getPaymentCardURL() string {
 }
 
 func getListPaymentTypeKredivoURL() string {
-	if FaspayConfig.Env != "prod" {
-		return "https://dev.faspay.co.id/cvr/300012/10"
-	}
-	return "https://web.faspay.co.id/cvr/300012/10"
+	return FaspayConfig.Url + "cvr/300012/10"
 }
 
 func getCancelTransactionKredivoURL() string {
-	if FaspayConfig.Env != "prod" {
-		return "https://dev.faspay.co.id/cvr/300013/10"
-	}
-	return "https://web.faspay.co.id/cvr/300013/10"
+	return FaspayConfig.Url + "cvr/300013/10"
 }
