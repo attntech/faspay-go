@@ -227,7 +227,34 @@ func SendPaymentDebit(params *PaymentDebitRequest) (result *PaymentResponse, err
 		ResponseDesc: sendRequest["response_desc"].(string),
 		BillNo:       sendRequest["bill_no"].(string),
 		BillItems:    sendRequest["bill_items"].([]interface{}),
-		RedirectURL:  sendRequest["redirect_url"].(string),
+	}
+
+	if sendRequest["response"] != nil {
+		result.Response = sendRequest["response"].(string)
+	}
+
+	if sendRequest["trx_id"] != nil {
+		result.TrxID = sendRequest["trx_id"].(string)
+	}
+
+	if sendRequest["response_code"] != nil {
+		result.ResponseCode = sendRequest["response_code"].(string)
+	}
+
+	if sendRequest["response_desc"] != nil {
+		result.ResponseDesc = sendRequest["response_desc"].(string)
+	}
+
+	if sendRequest["bill_no"] != nil {
+		result.BillNo = sendRequest["bill_no"].(string)
+	}
+
+	if sendRequest["bill_items"] != nil {
+		result.BillItems = sendRequest["bill_items"].([]interface{})
+	}
+
+	if sendRequest["redirect_url"] != nil {
+		result.RedirectURL = sendRequest["redirect_url"].(string)
 	}
 
 	if params.PaymentChannel == OVO {
