@@ -220,14 +220,7 @@ func SendPaymentDebit(params *PaymentDebitRequest) (result *PaymentResponse, err
 		return result, nil
 	}
 
-	result = &PaymentResponse{
-		Response:     sendRequest["response"].(string),
-		TrxID:        sendRequest["trx_id"].(string),
-		ResponseCode: sendRequest["response_code"].(string),
-		ResponseDesc: sendRequest["response_desc"].(string),
-		BillNo:       sendRequest["bill_no"].(string),
-		BillItems:    sendRequest["bill_items"].([]interface{}),
-	}
+	result = &PaymentResponse{}
 
 	if sendRequest["response"] != nil {
 		result.Response = sendRequest["response"].(string)
